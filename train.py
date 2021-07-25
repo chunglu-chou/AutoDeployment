@@ -5,8 +5,8 @@ import pickle
 from sklearn.linear_model import LinearRegression
 import time
 
-dataPath = os.getcwd() + '/db/boston.csv'
-modelPath = os.getcwd() + '/model-' + str(time.time()) + '.sav'
+dataPath = os.path.join(os.path.abspath(os.getcwd()), 'db/boston.csv')
+modelPath = os.path.join(os.path.abspath(os.getcwd()), 'server/model.sav')
 
 with open(dataPath, newline = '') as csvfile:
     # read data
