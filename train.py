@@ -5,8 +5,8 @@ import pickle
 from sklearn.linear_model import LinearRegression
 import time
 
-dataPath = os.getcwd() + "/db/boston.csv"
-modelPath = os.getcwd() + "/model-" + str(time.time()) + ".sav"
+dataPath = os.getcwd() + '/db/boston.csv'
+modelPath = os.getcwd() + '/model-' + str(time.time()) + '.sav'
 
 with open(dataPath, newline = '') as csvfile:
     # read data
@@ -16,7 +16,6 @@ with open(dataPath, newline = '') as csvfile:
     # regression
     model = LinearRegression()
     model.fit(data, label)
-    print(f"R square: {model.score(data, label)}")
+    print(f'R square: {model.score(data, label)}')
     with open(modelPath, 'wb') as modelFile:
         pickle.dump(model, modelFile)
-print(os.getcwd())
