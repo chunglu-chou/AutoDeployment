@@ -1,13 +1,9 @@
+import config
 import csv
+import json
 import os
 import sys
-
-dataPath = os.path.join(os.path.abspath(os.getcwd()), 'db/boston.csv')
-
-data = [
-    [0.13004, 12.5, 8.87, 0, 0.592, 6.836, 72.9, 6.5430, 5, 331, 15.2, 299.71, 13.1, 12.9],
-    [0.95204, 0, 8.14, 0, 0.882, 5.935, 87.2, 4.9013, 4, 301, 21, 452.87, 15.83, 21.2]
-]
+import train
 
 args = sys.argv
 if len(args) < 2:
@@ -15,10 +11,20 @@ if len(args) < 2:
 elif len(args) > 2:
     print("Too many arguments")
 else:
+    with open(config.SIZEPATH, 'r') as sizeFile:
+        sizeData = json.load(sizeFile)
+        currSize = sizeData["currSize"]
     numOfData = int(args[1])
     if numOfData == 1 or numOfData == 2:
-        with open(dataPath, 'a') as csvFile:
+        with open(config.DATAPATH, 'a') as csvFile:
             writer = csv.writer(csvFile)
-            writer.writerows(data[:numOfData])
+            writer.writerows(config.FAKEDATA[:numOfData])
+            if currSize + numOfData >= config.BATCHSIZE:
+                sizeData["currSize"] = 0
+                train.train()
+            else:
+                sizeData["currSize"] += numOfData
+            with open(config.SIZEPATH, 'w') as sizeFile:
+                json.dump(sizeData, sizeFile)
     else:
         print("Not supported yet")
