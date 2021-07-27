@@ -2,8 +2,8 @@ import os
 
 # global constants
 DATAPATH = os.path.join(os.path.abspath(os.getcwd()), 'db/boston.csv')
-MODELPATH = os.path.join(os.path.abspath(os.getcwd()), 'server/model.sav')
-SIZEPATH = os.path.join(os.path.abspath(os.getcwd()), 'currSize.json')
+MODELPATH = os.path.join(os.path.abspath(os.getcwd()), 'models/')
+STATUSPATH = os.path.join(os.path.abspath(os.getcwd()), 'status.json')
 BATCHSIZE = 2
 FAKEDATA = [
     [0.13004, 12.5, 8.87, 0, 0.592, 6.836, 72.9,

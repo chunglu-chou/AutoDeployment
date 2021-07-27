@@ -1,0 +1,25 @@
+services:
+    server-blue:
+        build: server/
+        container_name: blue
+        networks:
+            - deployment 
+    server-green:
+        build: server/
+        container_name: green
+        networks:
+            - deployment
+    nginx:
+        build: .
+        container_name: nginx
+        networks:
+            - deployment
+        depends_on:
+            - server-blue
+            - server-green
+        ports:
+            - "8080:80"
+
+networks:
+    deployment:
+        name: server-net

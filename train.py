@@ -16,8 +16,12 @@ def train():
         model = LinearRegression()
         model.fit(data, label)
         print(f'R square: {model.score(data, label)}')
-        with open(config.MODELPATH, 'wb') as modelFile:
+        modelName = time.strftime("%Y-%m-%d_%H-%M-%S", time.gmtime()) + ".sav"
+        if not os.path.exists(config.MODELPATH):
+            os.mkdir(config.MODELPATH)
+        with open(os.path.join(config.MODELPATH, modelName), 'wb') as modelFile:
             pickle.dump(model, modelFile)
+            return os.path.join(config.MODELPATH, modelName)
 
-if "__name__" == "__main__":
+if __name__ == "__main__":
     train()

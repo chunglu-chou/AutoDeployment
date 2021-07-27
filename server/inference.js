@@ -1,15 +1,15 @@
 const express = require('express');
 const {spawn} = require('child_process');
 
-const python = spawn('python3', ['-W', 'ignore', 'inference.py']);
-const buf = [];
-
 const app = express();
 const port = 3001;
 
 app.use(express.json());
 
 app.post('/inference', (req, res) => {
+    const python = spawn('python3', ['-W', 'ignore', 'inference.py']);
+    const buf = [];
+    
     // transform data to 2D array
     data = [[]]
     for (var key in req.body) {
@@ -17,8 +17,9 @@ app.post('/inference', (req, res) => {
     }
 
     // send data to python inference code
-    python.stdin.write(JSON.stringify(data));
-    python.stdin.end();
+    python.stdin.write(JSON.stringify(data), (err) => {
+        python.stdin.end();
+    });
 
     // get the response and return
     python.stdout.on('data', (output) => {
