@@ -1,17 +1,32 @@
+from typing import List
+from fastapi import FastAPI
+from pydantic import BaseModel
 import json
 import numpy as np
 import os
 import pickle
 import sys
 
-modelPath = os.path.join(os.path.abspath(os.getcwd()), 'model.sav')
+# Define data model
+class Data(BaseModel):
+    data: List[List[float]]
 
-if __name__ == '__main__':
-    if os.path.exists(modelPath):
-        with open(modelPath, 'rb') as modelFile:
-            data = json.load(sys.stdin)
-            model = pickle.load(modelFile)
-            prediction = model.predict(data)[0]
-            json.dump(prediction, sys.stdout)
-    else:
-        print("Invalid model path")
+# Load model
+modelPath = os.path.join(os.path.abspath(os.getcwd()), 'model.sav')
+if os.path.exists(modelPath):
+    with open(modelPath, 'rb') as modelFile:
+        model = pickle.load(modelFile)
+else:
+    print("Invalid model path")
+    model = None
+
+# Start app
+app = FastAPI()
+
+# Define inference API
+@app.post("/inference")
+async def inference(body: Data):
+    if model:
+        prediction = model.predict(np.array(body.data, dtype = np.float64))
+        return {"Price": prediction[0]}
+    return None

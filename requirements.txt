@@ -1,3 +1,4 @@
+locust
 numpy
 sklearn
 requests
