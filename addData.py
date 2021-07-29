@@ -12,14 +12,17 @@ if len(args) < 2:
 elif len(args) > 2:
     print("Too many arguments")
 else:
+    # Open status file and load the current batch size
     with open(config.STATUSPATH, 'r') as statusFile:
         status = json.load(statusFile)
         currSize = status["currSize"]
     numOfData = int(args[1])
     if numOfData == 1 or numOfData == 2:
+        # Adding data
         with open(config.DATAPATH, 'a') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerows(config.FAKEDATA[:numOfData])
+        # Decide if training is required
         if currSize + numOfData >= config.BATCHSIZE:
             status["currSize"] = 0
             modelPath = train.train()
@@ -33,6 +36,7 @@ else:
                 print("No host name: " + status["host"])
         else:
             status["currSize"] += numOfData
+        # Update status file
         with open(config.STATUSPATH, 'w') as statusFile:
             json.dump(status, statusFile)
     else:
