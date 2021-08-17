@@ -1,4 +1,5 @@
 fastapi
 numpy
+requests
 sklearn
 uvicorn[standard]
